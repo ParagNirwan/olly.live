@@ -1,6 +1,7 @@
 {
   "version": 2,
   "routes": [
+    { "src": "/olly.txt", "dest": "/olly.txt" },
     { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }
