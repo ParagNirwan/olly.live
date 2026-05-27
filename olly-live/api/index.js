@@ -1,10 +1,15 @@
 export const config = {
-  runtime: 'edge', // Tells Vercel to run this globally at the edge
+  runtime: 'edge', 
 };
 
 export default async function handler(req) {
   const userAgent = req.headers.get('user-agent') || '';
   const url = new URL(req.url);
+
+  // If someone is directly requesting the text file path, let Vercel handle it natively
+  if (url.pathname === '/olly.txt') {
+    return; 
+  }
 
   // 1. Check if the request is NOT from curl (e.g., Chrome, Safari)
   if (!userAgent.toLowerCase().includes('curl')) {
@@ -12,8 +17,7 @@ export default async function handler(req) {
     return Response.redirect('https://github.com/your-username/your-repo', 302);
   }
 
-  // 2. If it IS curl, fetch and serve the ASCII text file
-  // Vercel hosts public files at the base domain origin
+  // 2. If it IS curl, fetch the raw asset
   const assetUrl = `${url.origin}/olly.txt`; 
   const fileResponse = await fetch(assetUrl);
 
